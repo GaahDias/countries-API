@@ -1,21 +1,12 @@
 'use strict';
 
-//const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
 ///////////////////////////////////////
 
-function getCountryData(country) {
-
-    const request = new XMLHttpRequest;
-    request.open('GET', 'https://restcountries.eu/rest/v2/name/' + country); //request de info de paises
-    request.send(); //enviando a request
-
-    request.addEventListener('load', () => {            //setando um listener para quando a informacao chegar
-        const [data] = JSON.parse(request.responseText);  //"load", executar o codigo para printar no meu console as infos recebidas
-        console.log(data);
-
-        const html = `
+//funcao para exibir as funcoes na pagina
+function renderCountry(data) {
+    const html = `
             <article class="country">
                 <img class="country__img" src="${data.flag}" />
                 <div class="country__data">
@@ -27,8 +18,20 @@ function getCountryData(country) {
                 </div>
             </article>
             `;
-        countriesContainer.insertAdjacentHTML('afterbegin', html);
-        countriesContainer.style.opacity = 1;
+    countriesContainer.insertAdjacentHTML('afterbegin', html);
+    countriesContainer.style.opacity = 1;
+}
+
+function getCountryData(country) {
+    //criando a variavel de request
+    const request = new XMLHttpRequest;
+    request.open('GET', 'https://restcountries.eu/rest/v2/name/' + country); //request de info de paises
+    request.send(); //enviando a request
+
+    request.addEventListener('load', () => {  //setando um listener para quando a informacao chegar mostrar as infos no site
+        const [data] = JSON.parse(request.responseText); //convertendo a info de JSON para objeto
+        console.log(data);
+        renderCountry(data); //exibindo as infos na pagina
     })
 };
 
